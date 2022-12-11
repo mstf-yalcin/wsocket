@@ -17,6 +17,6 @@ io.on('connection',function(socket){
 
 })
 
-server.listen(80 || 5000,() => { // setting port for existing server
+server.listen(443 || 5000,() => { // setting port for existing server
     console.log('Https listening'); // Now socket and server both listens to same port
 });
