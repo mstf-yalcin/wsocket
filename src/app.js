@@ -1,22 +1,19 @@
-const server=require('http').createServer();
+const express = require('express')
+const app = express()
+const server = require('http').createServer(app);
+const WebSocket = require('ws');
 
-// const io= require('socket.io')(server);
-var io = require('socket.io')(server, {'transports': ['websocket', 'polling']});
-io.on('connection',function(socket){
-    console.log("connected");
+const wss = new WebSocket.Server({ server:server });
 
-    socket.on('sendData',function(data){
-            //event-ismi -> data
-            console.log(data);
-        io.emit('data',data);
-    })
+wss.on('connection', function connection(ws) {
+  console.log('A new client Connected!');
+  ws.send('Welcome New Client!');
 
-    socket.on('disconnect',function(){
-        console.log("disconnect");
-    })
-
-})
-
-server.listen(443 || 5000,() => { // setting port for existing server
-    console.log('Https listening'); // Now socket and server both listens to same port
+  ws.on('sendData', function incoming(message) {
+    console.log('received: %s', message);
+  });
 });
+
+app.get('/', (req, res) => res.send('Hello World!'))
+
+server.listen(443, () => console.log(`Lisening on port :443`))
